@@ -1,4 +1,4 @@
-FROM conda-forge/linux-anvil
+FROM condaforge/linux-anvil
 
 # Install CUDA 8.0, AMD APP SDK 3.0, TeX for building OpenmM
 
@@ -11,7 +11,11 @@ FROM conda-forge/linux-anvil
 #RUN rpm -i --quiet epel-release-5-4.noarch.rpm && \
 #    rm -rf epel-release-5-4.noarch.rpm
 
-RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender
+#ADD http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm .
+#RUN rpm -i --quiet epel-release-6-8.noarch.rpm && \
+#    rm -rf epel-release-6-8.noarch.rpm
+
+RUN  yum clean all && yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender
 
 # Install AMD APP SDK
 #ADD https://jenkins.choderalab.org/userContent/AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 .

@@ -2,6 +2,17 @@ FROM condaforge/linux-anvil
 
 # Install TeXLive, AMD APP SDK 3.0, and NVIDIA CUDA 8.0 for building OpenMM and omnia projects
 
+# CUDA requires dkms libvdpau
+# TeX installation requires wget
+# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx docs
+# libXext libSM libXrender are required for matplotlib to work
+
+ADD http://download.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm .
+RUN rpm -i --quiet epel-release-5-4.noarch.rpm && \
+    rm -rf epel-release-5-4.noarch.rpm
+
+RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender perl
+
 #
 # Install TeXLive
 #
@@ -22,21 +33,7 @@ ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
 # Install AMD APP SDK 3.0
 #
 
-# CUDA requires dkms libvdpau
-# TeX installation requires wget
-# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx docs
-# libXext libSM libXrender are required for matplotlib to work
-
-ADD http://download.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm .
-RUN rpm -i --quiet epel-release-5-4.noarch.rpm && \
-    rm -rf epel-release-5-4.noarch.rpm
-
-RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender
-
-#
 # Install AMD APP SDK
-#
-
 ADD http://s3.amazonaws.com/omnia-ci/AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 .
 RUN pwd
 RUN ls -ltr
@@ -45,6 +42,10 @@ RUN tar xjf AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 && \
     rm -f AMD-APP-SDK-v3.0.130.135-GA-linux64.sh AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 && \
     rm -rf /opt/AMDAPPSDK-3.0/samples/
 ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
+
+#
+# Install CUDA 8.0
+#
 
 # Install minimal CUDA components (this may be more than needed)
 ADD https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda-repo-rhel6-8-0-local-8.0.44-1.x86_64-rpm .

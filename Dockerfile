@@ -1,5 +1,5 @@
-FROM jchodera/omnia-linux-forge:texlive-amd30-cuda80
-
+FROM jchodera/omnia-linux-anvil:texlive-amd30-cuda80
+     
 RUN yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
 

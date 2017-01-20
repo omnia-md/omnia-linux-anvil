@@ -10,7 +10,7 @@ RUN rpm --quiet -i epel-release-latest-6.noarch.rpm && \
 # wget (optionally??) required for AMD APP SDK install
 # dkms libvdpau required for CUDA install
 # kernel headers needed for CUDA
-# xs and cmake for building clang
+# xz and cmake for building clang
 RUN yum install -y --quiet redhat-lsb wget \
     dkms libvdpau kernel-devel-$(uname -r) kernel-headers-$(uname -r) \
     xz cmake

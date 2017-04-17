@@ -15,7 +15,7 @@ RUN tar -xzf install-tl-unx.tar.gz && \
     /usr/local/texlive/2016/bin/x86_64-linux/tlmgr install \
           cmap fancybox titlesec framed fancyvrb threeparttable \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring
+          xstring fncychap tabulary capt-of eqparbox environ trimspaces
 ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
 
 #

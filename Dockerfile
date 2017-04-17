@@ -19,7 +19,7 @@ RUN tar -xzf install-tl-unx.tar.gz && \
 ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
 
 #
-# Install AMD APP SDK 3.0
+# Install EPEL and extra packages
 #
 
 # CUDA requires dkms libvdpau
@@ -34,7 +34,7 @@ RUN rpm -i --quiet epel-release-6-8.noarch.rpm && \
 RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender
 
 #
-# Install AMD APP SDK
+# Install AMD APP SDK 3.0
 #
 
 ADD http://s3.amazonaws.com/omnia-ci/AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 .

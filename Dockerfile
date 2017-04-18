@@ -31,7 +31,7 @@ ADD http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.
 RUN rpm -i --quiet epel-release-6-8.noarch.rpm && \
     rm -rf epel-release-6-8.noarch.rpm
 
-RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender
+RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender groff
 
 #
 # Install AMD APP SDK 3.0

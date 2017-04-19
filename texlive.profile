@@ -2,8 +2,8 @@
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
 selected_scheme scheme-full
-TEXDIR /usr/local/texlive/2015
-TEXMFCONFIG ~/.texlive2015/texmf-config
+TEXDIR /usr/local/texlive/2016
+TEXMFCONFIG ~/.texlive2016/texmf-config
 TEXMFHOME ~/texmf
 TEXMFLOCAL /usr/local/texlive/texmf-local
 TEXMFSYSCONFIG /usr/local/texlive/2015/texmf-config

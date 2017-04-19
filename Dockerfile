@@ -23,16 +23,25 @@ RUN  yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender
 #
 
 #ADD http://ctan.mackichan.com/systems/texlive/tlnet/install-tl-unx.tar.gz .
-ADD http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz .
-ADD texlive.profile .
-RUN tar -xzf install-tl-unx.tar.gz && \
-    cd install-tl-* &&  ./install-tl -profile /texlive.profile && cd - && \
-    rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \
-    /usr/local/texlive/2016/bin/x86_64-linux/tlmgr install \
-          cmap fancybox titlesec framed fancyvrb threeparttable \
-          mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring fncychap tabulary capt-of eqparbox environ trimspaces
-ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
+#ADD http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz .
+#ADD texlive.profile .
+#RUN tar -xzf install-tl-unx.tar.gz && \
+#    cd install-tl-* &&  ./install-tl -profile /texlive.profile && cd - && \
+#    rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \
+#    /usr/local/texlive/2016/bin/x86_64-linux/tlmgr install \
+#          cmap fancybox titlesec framed fancyvrb threeparttable \
+#          mdwtools wrapfig parskip upquote float multirow hyphenat caption \
+#          xstring fncychap tabulary capt-of eqparbox environ trimspaces
+#ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
+
+#
+# Attempt to use yum TeXLive
+#
+RUN yum install -y --quiet texlive
+RUN tlmgr install \
+    cmap fancybox titlesec framed fancyvrb threeparttable \
+    mdwtools wrapfig parskip upquote float multirow hyphenat caption \
+    xstring fncychap tabulary capt-of eqparbox environ trimspaces
 
 #
 # Install AMD APP SDK 3.0

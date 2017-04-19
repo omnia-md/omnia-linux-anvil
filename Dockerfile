@@ -3,6 +3,22 @@ FROM condaforge/linux-anvil
 # Install TeXLive, AMD APP SDK 3.0, and NVIDIA CUDA 8.0 for building OpenMM and omnia projects
 
 #
+# Install EPEL and extra packages
+#
+
+# CUDA requires dkms libvdpau
+# TeX installation requires wget and perl
+# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx docs
+# libXext libSM libXrender are required for matplotlib to work
+
+ADD http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm .
+RUN rpm -i --quiet epel-release-6-8.noarch.rpm && \
+    rm -rf epel-release-6-8.noarch.rpm
+
+RUN  yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender groff
+
+
+#
 # Install TeXLive
 #
 
@@ -17,21 +33,6 @@ RUN tar -xzf install-tl-unx.tar.gz && \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
           xstring fncychap tabulary capt-of eqparbox environ trimspaces
 ENV PATH=/usr/local/texlive/2016/bin/x86_64-linux:$PATH
-
-#
-# Install EPEL and extra packages
-#
-
-# CUDA requires dkms libvdpau
-# TeX installation requires wget
-# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx docs
-# libXext libSM libXrender are required for matplotlib to work
-
-ADD http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm .
-RUN rpm -i --quiet epel-release-6-8.noarch.rpm && \
-    rm -rf epel-release-6-8.noarch.rpm
-
-RUN  yum install -y --quiet dkms libvdpau git wget libXext libSM libXrender groff
 
 #
 # Install AMD APP SDK 3.0

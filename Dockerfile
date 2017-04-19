@@ -3,13 +3,6 @@ FROM condaforge/linux-anvil
 # Install TeXLive, AMD APP SDK 3.0, and NVIDIA CUDA 8.0 for building OpenMM and omnia projects
 
 
-# Install EPEL
-ADD https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm .
-RUN rpm -i --quiet epel-release-latest-6.noarch.rpm && \
-    rm -rf epel-release-latest-6.noarch.rpm
-
-RUN yum install -y --quiet git wget perl
-
 #
 # Install EPEL and extra packages
 #
@@ -29,11 +22,6 @@ RUN  yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender
 #
 # Install TeXLive
 #
-
-# TeX installation requires wget
-# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx docs
-# libXext libSM libXrender are required for matplotlib to work
-RUN yum install -y --quiet git wget libXext libSM libXrender perl
 
 #ADD http://ctan.mackichan.com/systems/texlive/tlnet/install-tl-unx.tar.gz .
 ADD http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz .

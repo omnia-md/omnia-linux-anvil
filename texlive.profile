@@ -6,9 +6,9 @@ TEXDIR /usr/local/texlive/2016
 TEXMFCONFIG ~/.texlive2016/texmf-config
 TEXMFHOME ~/texmf
 TEXMFLOCAL /usr/local/texlive/texmf-local
-TEXMFSYSCONFIG /usr/local/texlive/2015/texmf-config
-TEXMFSYSVAR /usr/local/texlive/2015/texmf-var
-TEXMFVAR ~/.texlive2015/texmf-var
+TEXMFSYSCONFIG /usr/local/texlive/2016/texmf-config
+TEXMFSYSVAR /usr/local/texlive/2016/texmf-var
+TEXMFVAR ~/.texlive2016/texmf-var
 binary_x86_64-linux 1
 collection-basic 1
 collection-bibtexextra 0

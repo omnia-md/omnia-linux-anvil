@@ -37,7 +37,7 @@ RUN  yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender
 #
 # Attempt to use yum TeXLive
 #
-RUN yum install -y --quiet texlive
+RUN yum install -y texlive
 RUN tlmgr install \
     cmap fancybox titlesec framed fancyvrb threeparttable \
     mdwtools wrapfig parskip upquote float multirow hyphenat caption \

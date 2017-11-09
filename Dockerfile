@@ -1,6 +1,6 @@
 FROM condaforge/linux-anvil
 
-# Install TeXLive, AMD APP SDK 3.0, and NVIDIA CUDA 8.0 for building OpenMM and omnia projects
+# Install TeXLive, AMD APP SDK 3.0, and NVIDIA CUDA 9.0 for building OpenMM and Omnia projects
 
 
 #

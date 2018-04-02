@@ -59,19 +59,19 @@ ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
 RUN yum install -y --quiet dkms libvdpau
 
 # Install minimal CUDA components (this may be more than needed)
-ADD https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64-rpm .
-RUN mv cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64-rpm cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm
-RUN rpm --quiet -i cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-minimal-build-9-0-9.0.176-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-cufft-dev-9-0-9.0.176-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-driver-dev-9-0-9.0.176-1.x86_64.rpm && \
-    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/xorg-x11-drv-nvidia-libs-384.81-1.el6.x86_64.rpm && \
-    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/xorg-x11-drv-nvidia-devel-384.81-1.el6.x86_64.rpm && \
-    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-nvrtc-9-0-9.0.176-1.x86_64.rpm && \
-    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-nvrtc-dev-9-0-9.0.176-1.x86_64.rpm && \
-    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-runtime-9-0-9.0.176-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-driver-dev-9-0-9.0.176-1.x86_64.rpm && \
-    rm -rf /cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm /var/cuda-repo-9-0-local/*.rpm /var/cache/yum/cuda-9-0-local/
+ADD https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64 .
+RUN mv cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64 cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64.rpm
+RUN rpm --quiet -i cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64 && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-minimal-build-9-1-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-cufft-dev-9-1-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-driver-dev-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/xorg-x11-drv-nvidia-libs-387.26-1.el6.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/xorg-x11-drv-nvidia-devel-387.26-1.el6.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-nvrtc-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-nvrtc-dev-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-runtime-9-1-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-driver-dev-9-1-9.1.85-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64.rpm /var/cuda-repo-9-1-local/*.rpm /var/cache/yum/cuda-9-0-local/
 
 RUN yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all

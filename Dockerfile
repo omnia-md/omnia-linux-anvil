@@ -24,7 +24,7 @@ RUN  yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender
 
 #ADD http://ctan.mackichan.com/systems/texlive/tlnet/install-tl-unx.tar.gz .
 ADD http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz .
-ADD texlive.profile.cut texlive.profile
+ADD texlive.profile .
 RUN tar -xzf install-tl-unx.tar.gz && \
     cd install-tl-* &&  ./install-tl -profile /texlive.profile && cd - && \
     rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \

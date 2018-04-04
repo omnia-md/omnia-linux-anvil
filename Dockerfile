@@ -25,7 +25,7 @@ RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8
 
 # Add config file from repo
 ADD texlive.profile .
-# Download, untar, install, remove install files, install additional packages
+# Download, untar, install, remove install files, install additional packages, make symlinks for all users
 RUN curl -L http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz --output install-tl-unx.tar.gz && \
     tar -xzf install-tl-unx.tar.gz && \
     cd install-tl-* &&  ./install-tl -profile /texlive.profile && cd - && \
@@ -33,7 +33,8 @@ RUN curl -L http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz -
     /usr/local/texlive/2017/bin/x86_64-linux/tlmgr install \
           cmap fancybox titlesec framed fancyvrb threeparttable \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring fncychap tabulary capt-of eqparbox environ trimspaces
+          xstring fncychap tabulary capt-of eqparbox environ trimspaces && \
+    ln -s /usr/local/texlive/2017/bin/x86_64-linux/* /usr/local/sbin/
 ENV PATH=/usr/local/texlive/2017/bin/x86_64-linux:$PATH
 
 

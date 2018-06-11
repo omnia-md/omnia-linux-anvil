@@ -44,20 +44,12 @@ RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8
 
 
 # Download, untar, install AMD APP SDK, remove tarball, install script, and samples
-#RUN curl -L http://debian.nullivex.com/amd/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 > AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
-#    tar xjf AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
-#    ./AMD-APP-SDK-v3.0.130.136-GA-linux64.sh -- -s -a yes && \
-#    rm -f AMD-APP-SDK-v3.0.130.136-GA-linux64.sh AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
-#    rm -rf /opt/AMDAPPSDK-3.0/samples/
-#ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
-
-# old
-#RUN curl -L http://s3.amazonaws.com/omnia-ci/AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 > AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 && \
-#    tar xjf AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 && \
-#    ./AMD-APP-SDK-v3.0.130.135-GA-linux64.sh -- -s -a yes && \
-#    rm -f AMD-APP-SDK-v3.0.130.135-GA-linux64.sh AMD-APP-SDKInstaller-v3.0.130.135-GA-linux64.tar.bz2 && \
-#    rm -rf /opt/AMDAPPSDK-3.0/samples/
-#ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
+RUN curl -L http://debian.nullivex.com/amd/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 > AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
+    tar xjf AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
+    ./AMD-APP-SDK-v3.0.130.136-GA-linux64.sh -- -s -a yes && \
+    rm -f AMD-APP-SDK-v3.0.130.136-GA-linux64.sh AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2 && \
+    rm -rf /opt/AMDAPPSDK-3.0/samples/
+ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
 
 #
 # Install CUDA

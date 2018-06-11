@@ -55,21 +55,29 @@ ENV OPENCL_HOME=/opt/AMDAPPSDK-3.0 OPENCL_LIBPATH=/opt/AMDAPPSDK-3.0/lib/x86_64
 # Install CUDA
 #
 
-# install CUDA 8.0 in the same container
+# install CUDA 7.5
+
+RUN wget -q http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run && \
+    chmod +x cuda_7.5.18_linux.run && \
+    source /opt/docker/bin/entrypoint_source && \
+    ./cuda_7.5.18_linux.run --silent --no-opengl-libs --toolkit && \
+    rm -f cuda_7.5.18_linux.run
+
+# install CUDA 8.0
 RUN wget -q https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run && \
     chmod +x cuda_8.0.61_375.26_linux-run && \
     source /opt/docker/bin/entrypoint_source && \
     ./cuda_8.0.61_375.26_linux-run --silent --no-opengl-libs --toolkit && \
     rm -f cuda_8.0.61_375.26_linux-run
 
-# install CUDA 9.0 in the same container
+# install CUDA 9.0
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run && \
     chmod +x cuda_9.0.176_384.81_linux-run && \
     source /opt/docker/bin/entrypoint_source && \
     ./cuda_9.0.176_384.81_linux-run --silent --no-opengl-libs --toolkit && \
     rm -f cuda_9.0.176_384.81_linux-run
 
-# patch 1, patch2
+# CUDA 9.0 patch 1, patch2
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/1/cuda_9.0.176.1_linux-run && \
     chmod +x cuda_9.0.176.1_linux-run && \
     source /opt/docker/bin/entrypoint_source && \
@@ -81,14 +89,14 @@ RUN wget -q https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/2/cuda_9.
     ./cuda_9.0.176.2_linux-run -s --accept-eula && \
     rm -f cuda_9.0.176.2_linux-run
 
-# install CUDA 9.1 in the same container
+# install CUDA 9.1
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux && \
     chmod +x cuda_9.1.85_387.26_linux && \
     source /opt/docker/bin/entrypoint_source && \
     ./cuda_9.1.85_387.26_linux --silent --no-opengl-libs --toolkit && \
     rm -f cuda_9.1.85_387.26_linux
 
-# patch 1, patch2, patch3
+# CUDA 9.1 patch 1, patch2, patch3
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda_9.1.85.1_linux && \
     chmod +x cuda_9.1.85.1_linux && \
     source /opt/docker/bin/entrypoint_source && \
@@ -105,7 +113,7 @@ RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/3/cuda_9.
     ./cuda_9.1.85.3_linux -s --accept-eula && \
     rm -f cuda_9.1.85.3_linux
 
-# install CUDA 9.2 in the same container
+# install CUDA 9.2
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.88_396.26_linux && \
     chmod +x cuda_9.2.88_396.26_linux && \
     source /opt/docker/bin/entrypoint_source && \

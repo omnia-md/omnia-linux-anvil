@@ -70,10 +70,9 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.4.10-Linux-x86_6
 # Install conda build and deployment tools, pinning conda-build to a version our build framework can use.
 # NOTE: This step differs from condaforge/linux-anvil
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes --quiet conda-build==2.1.17 anaconda-client jinja2 setuptools && \
-    #export CONDA_BUILD_INFO=( `conda list conda-build | grep conda-build` ) && \
-    #echo "conda-build ${CONDA_BUILD_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda install --yes git && \
+    conda install --yes --quiet conda-build==2.1.17 anaconda-client jinja2 setuptools git && \
+    export CONDA_BUILD_INFO=( `conda list conda-build | grep conda-build` ) && \
+    echo "conda-build ${CONDA_BUILD_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
     conda clean -tipsy && \
     rm -rf /opt/conda/pkgs/*
 

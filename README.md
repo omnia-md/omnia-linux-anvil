@@ -8,7 +8,7 @@ compute-based calculations and TeX packages for doc building.
 ## Image Features and Extensions
 
 * TeXLive 2018
-* CUDA 9.0
+* CUDA 9.1
 
 ## Building the Image
 
@@ -21,11 +21,11 @@ Builds can be found [here](https://hub.docker.com/r/jchodera/omnia-linux-anvil/)
 
 The compiled images will be available to pull from Docker Hub. The image can be accessed with the following command:
 
-`docker pull jchodera/omnia-linux-anvil:texlive18-cuda90`
+`docker pull jchodera/omnia-linux-anvil:texlive18-cuda91`
 
 or
 
-`docker pull omniamd/omnia-linux-anvil:texlive18-cuda90`
+`docker pull omniamd/omnia-linux-anvil:texlive18-cuda91`
 
 In future versions, the `omniamd/omnia-linux-anvil` will be the preferred source, however, they are identical for now as
 we plan out the transition.

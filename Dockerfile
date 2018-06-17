@@ -1,5 +1,11 @@
 FROM jchodera/omnia-linux-anvil:texlive18
 
+# Install NVIDIA driver
+RUN wget -q http://us.download.nvidia.com/XFree86/Linux-x86_64/390.67/NVIDIA-Linux-x86_64-390.67.run && \
+    chmod +x NVIDIA-Linux-x86_64-390.67.run && \
+    ./NVIDIA-Linux-x86_64-390.67.run --silent --accept-license --no-kernel-module --no-kernel-module-source --no-nvidia-modprobe --no-rpms --no-drm --no-libglx-indirect --no-distro-scripts && \
+    rm -f NVIDIA-Linux-x86_64-390.67.run
+
 # Install CUDA 9.2
 RUN wget -q https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.88_396.26_linux && \
     chmod +x cuda_9.2.88_396.26_linux && \

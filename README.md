@@ -9,6 +9,7 @@ compute-based calculations and TeX packages for doc building.
 
 * TeXLive 2018
 * CUDA 9.0
+* NVIDIA driver 390.67
 
 ## Building the Image
 

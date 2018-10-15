@@ -1,4 +1,4 @@
-FROM omnia-linux-anvil:cf-texlive18
+FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 
 #
 # Install all the CUDA variants in their minimal Forms

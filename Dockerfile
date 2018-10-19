@@ -11,7 +11,7 @@ MAINTAINER omnia <john.chodera@choderalab.org>
 ENV LANG en_US.UTF-8
 
 # Add a timestamp for the build. Also, bust the cache.
-ADD http://tycho.usno.navy.mil/timer.html /opt/docker/etc/timestamp
+ADD https://now.httpbin.org/when/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6

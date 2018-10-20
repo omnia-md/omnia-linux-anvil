@@ -150,9 +150,9 @@ RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
           cmap fancybox titlesec framed fancyvrb threeparttable \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
           xstring fncychap tabulary capt-of eqparbox environ trimspaces \
-          varwidth latexmk etoolbox tools framed \
-          xcolor graphics fancyvrb float wrapfig parskip upquote \
-          capt-of needspace oberdiek kvoptions && \          
+          varwidth latexmk etoolbox framed \
+          xcolor fancyvrb float wrapfig parskip upquote \
+          capt-of needspace kvoptions && \          
     ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
 ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
 

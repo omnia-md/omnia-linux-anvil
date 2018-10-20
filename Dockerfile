@@ -60,8 +60,8 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.4.10-Linux-x86_6
     conda config --set show_channel_urls True && \
     conda config --add channels conda-forge && \
     touch /opt/conda/conda-meta/pinned && \
-    conda install -yq conda==4.3.34 && \
     conda update --all --yes && \
+    conda install -yq conda==4.3.34 && \
     conda clean -tipy && \
     #export CONDA_CONDA_INFO=( `conda list conda | grep conda` ) && \
     #echo "conda ${CONDA_CONDA_INFO[1]}" >> /opt/conda/conda-meta/pinned && \

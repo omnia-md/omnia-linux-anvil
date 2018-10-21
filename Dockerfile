@@ -7,8 +7,12 @@ FROM centos:6
 
 MAINTAINER omnia <john.chodera@choderalab.org>
 
-# Set an encoding to make things work smoothly.
-ENV LANG en_US.UTF-8
+# Set locale and encoding to make things work smoothly
+# See http://jaredmarkell.com/docker-and-locales/
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
 
 # Add a timestamp for the build. Also, bust the cache.
 ADD https://now.httpbin.org/when/now /opt/docker/etc/timestamp
@@ -152,7 +156,7 @@ RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
           xstring fncychap tabulary capt-of eqparbox environ trimspaces \
           varwidth latexmk etoolbox framed \
           xcolor fancyvrb float wrapfig parskip upquote \
-          capt-of needspace kvoptions && \          
+          capt-of needspace && \          
     ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
 ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
 

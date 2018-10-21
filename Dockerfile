@@ -9,7 +9,8 @@ MAINTAINER omnia <john.chodera@choderalab.org>
 
 # Set locale and encoding to make things work smoothly
 # See http://jaredmarkell.com/docker-and-locales/
-RUN locale-gen en_US.UTF-8  
+#RUN locale-gen en_US.UTF-8 # not present in CentOS 6
+RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  

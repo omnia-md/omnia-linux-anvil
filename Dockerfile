@@ -21,6 +21,18 @@ RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8
 
 #
 # Install GLIBC 2.14 for TeXLive 2018 which needs full C++11 to run
+#
+# The localedata and localedef lines are there for the following conditions:
+#  1. Conda Forge sets en_US.UTF-8 as LANG in its env
+#  2. Adding the new GLIBC to LD_LIBRARY_PATH causes Perl to try and use it
+#  3. The Locales are not built by default with a GLIBC
+#  4. Perl then complains because the UTF-8 Locale is not compiled
+#  5. Running localedef uses the system one, and there does not appear to be a way to change the new one's pointer
+#  6. Finding the exact combination of commands to get the new localedef to work required digging through the Makefile
+#  7. These 2 commands create the pre-requisite folder to drop the locale file, and then compile ONLY en_US.UTF-8
+#  8. Using the built in Makefile commands installs all of the locales, which is >100MB
+#  9. locale-gen does not exist on CentOS 6
+# 10. Debugging this was a pain, especially since if you unset LANG, the errors go away (but may cause texlive to segfault later)
 
 RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.tar.gz && \
     tar -zxf glibc-2.14.tar.gz && \
@@ -29,6 +41,8 @@ RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.t
     cd build && \
     CC=/opt/rh/devtoolset-2/root/usr/bin/gcc ../configure --prefix=/opt/glibc-2.14 && \
     make -s && make -s install && \
+    make localedata/install-locales-dir && \
+    locale/localedef --alias-file=../intl/locale.alias -i ../localedata/locales/en_US -c -f ../localedata/charmaps/UTF-8 en_US.UTF-8 && \
     cd / && rm -rf glibc*
 
 #

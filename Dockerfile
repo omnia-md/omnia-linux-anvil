@@ -11,7 +11,7 @@ FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 #         A full install moves these but we don't need to, UNLESS we install the patch (e.g. the 3 patches for 9.1)
 
 # NOTE: NONE of these install the actual CUDA *DRIVER* as they would conflict with each other
-# We install 1 driver at the end which is backwards compatible with the various CUDA versions
+# We COULD install 1 driver at the end which is backwards compatible with the various CUDA versions, but this is still up for debate
 
 # CUDA 7.5
 RUN curl -L http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm > cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm && \

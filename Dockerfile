@@ -1,51 +1,116 @@
-FROM condaforge/linux-anvil
-
-# Install TeXLive 2018 for Omnia Projects
+FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 
 #
-# Install EPEL and extra packages
+# Install all the CUDA variants in their minimal Forms
 #
 
-# CUDA requires dkms libvdpau
-# TeX installation requires wget and perl
-# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx doc
-# libXext libSM libXrender are required for matplotlib to work
+# NOTE: This might be more than is needed for OpenMM
+# NOTE: Installing by RPM is much smaller than installing it "automatically"
+# Caveat: Installing this way causes the lib64 and include directory to be symlinked to
+#         targets/x86_64-linux/lib and targets/x86_64-linux/include respectively
+#         A full install moves these but we don't need to, UNLESS we install the patch (e.g. the 3 patches for 9.1)
 
-# Download and install EPEL, install extra packages for TeX, AMD, and CUDA, cleanup yum
-RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm --output epel-release-6-8.noarch.rpm && \
-    rpm -i --quiet epel-release-6-8.noarch.rpm && \
-    rm -rf epel-release-6-8.noarch.rpm && \
-    yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender groff && \
+# NOTE: NONE of these install the actual CUDA *DRIVER* as they would conflict with each other
+# We COULD install 1 driver at the end which is backwards compatible with the various CUDA versions, but this is still up for debate
+
+# CUDA 7.5
+RUN curl -L http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm > cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-7-5-local/cuda-minimal-build-7-5-7.5-18.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-7-5-local/cuda-cufft-dev-7-5-7.5-18.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-7-5-local/cuda-driver-dev-7-5-7.5-18.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm /var/cuda-repo-7-5-local/*.rpm /var/cache/yum/cuda-7-5-local/cal/ && \
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
 
-#
-# Install GLIBC 2.14 for TeXLive 2018 which needs full C++11 to run
+# CUDA 8.0
+RUN curl -L https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda-repo-rhel6-8-0-local-8.0.44-1.x86_64-rpm > cuda-repo-rhel6-8-0-local-8.0.44-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-8-0-local-8.0.44-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-8-0-local/cuda-minimal-build-8-0-8.0.44-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-8-0-local/cuda-cufft-dev-8-0-8.0.44-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-8-0-local/cuda-driver-dev-8-0-8.0.44-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-8-0-local/cuda-nvrtc-8-0-8.0.44-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-8-0-local/cuda-nvrtc-dev-8-0-8.0.44-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-8-0-local/cuda-runtime-8-0-8.0.44-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-8-0-local-8.0.44-1.x86_64.rpm /var/cuda-repo-8-0-local/*.rpm /var/cache/yum/cuda-8-0-local/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all
 
-RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.tar.gz && \
-    tar -zxf glibc-2.14.tar.gz && \
-    cd glibc-2.14 && \
-    mkdir build && \
-    cd build && \
-    CC=/opt/rh/devtoolset-2/root/usr/bin/gcc ../configure --prefix=/opt/glibc-2.14 && \
-    make -s && make -s install && \
-    cd / && rm -rf glibc*
+# CUDA 9.0
+RUN curl -L https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64-rpm > cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-minimal-build-9-0-9.0.176-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-cufft-dev-9-0-9.0.176-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-0-local/cuda-driver-dev-9-0-9.0.176-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-nvrtc-9-0-9.0.176-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-nvrtc-dev-9-0-9.0.176-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-0-local/cuda-runtime-9-0-9.0.176-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-9-0-local-9.0.176-1.x86_64.rpm /var/cuda-repo-9-0-local/*.rpm /var/cache/yum/cuda-9-0-local/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all
 
-#
-# Install TeXLive 2018
-#
+# CUDA 9.1
+# Have to unlink the lib64 and include directory for the patches
+RUN curl -L https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64 > cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-minimal-build-9-1-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-cufft-dev-9-1-9.1.85-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-1-local/cuda-driver-dev-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-nvrtc-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-nvrtc-dev-9-1-9.1.85-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-1-local/cuda-runtime-9-1-9.1.85-1.x86_64.rpm && \
+    unlink /usr/local/cuda-9.1/include && mv /usr/local/cuda-9.1/targets/*-linux/include /usr/local/cuda-9.1/ && \
+    unlink /usr/local/cuda-9.1/lib64 && mv /usr/local/cuda-9.1/targets/*-linux/lib /usr/local/cuda-9.1/lib64 && \
+    rm -rf /cuda-repo-rhel6-9-1-local-9.1.85-1.x86_64.rpm /var/cuda-repo-9-1-local/*.rpm /var/cache/yum/cuda-9-1-local/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all
+# CUDA 9.1 Patch 1, 2, and 3
+# The patches add the cublas libraries to lib64, which are not installed with the base and add to the size (~120MB)
+# The 3rd patch also adds libcublas 9.1.181 alongside 9.1.128, changing only symlinks. Adds >50 MB more
+# Add these as separate commands since all cleanup is done before, if we reduce sizes after install, we can
+# cleanup then
+RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda_9.1.85.1_linux && \
+    chmod +x cuda_9.1.85.1_linux && \
+    ./cuda_9.1.85.1_linux -s --accept-eula && \
+    rm -f cuda_9.1.85.1_linux
+RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/2/cuda_9.1.85.2_linux && \
+    chmod +x cuda_9.1.85.2_linux && \
+    ./cuda_9.1.85.2_linux -s --accept-eula && \
+    rm -f cuda_9.1.85.2_linux
+RUN wget -q https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/3/cuda_9.1.85.3_linux && \
+    chmod +x cuda_9.1.85.3_linux && \
+    ./cuda_9.1.85.3_linux -s --accept-eula && \
+    rm -f cuda_9.1.85.3_linux
 
-# Add config file from repo
-ADD texlive.profile .
-# Download, untar, install, remove install files, install additional packages, make symlinks for all users
-RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
-    curl -L http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz --output install-tl-unx.tar.gz && \
-    tar -xzf install-tl-unx.tar.gz && \
-    cd install-tl-* && ./install-tl -profile /texlive.profile && cd - && \
-    rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \
-    /usr/local/texlive/2018/bin/x86_64-linux/tlmgr install \
-          cmap fancybox titlesec framed fancyvrb threeparttable \
-          mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring fncychap tabulary capt-of eqparbox environ trimspaces varwidth latexmk && \
-    ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
-ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+# Cuda 9.2
+# Have to unlink the lib64 and include directory for the patch
+RUN curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod2/local_installers/cuda-repo-rhel6-9-2-local-9.2.148-1.x86_64 > cuda-repo-rhel6-9-2-local-9.2.148-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-9-2-local-9.2.148-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-2-local/cuda-minimal-build-9-2-9.2.148-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-2-local/cuda-cufft-dev-9-2-9.2.148-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-9-2-local/cuda-driver-dev-9-2-9.2.148-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-2-local/cuda-nvrtc-9-2-9.2.148-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-2-local/cuda-nvrtc-dev-9-2-9.2.148-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-9-2-local/cuda-runtime-9-2-9.2.148-1.x86_64.rpm && \
+    unlink /usr/local/cuda-9.2/include && mv /usr/local/cuda-9.2/targets/*-linux/include /usr/local/cuda-9.2/ && \
+    unlink /usr/local/cuda-9.2/lib64 && mv /usr/local/cuda-9.2/targets/*-linux/lib /usr/local/cuda-9.2/lib64 && \
+    rm -rf /cuda-repo-rhel6-9-2-local-9.2.148-1.x86_64.rpm /var/cuda-repo-9-2-local/*.rpm /var/cache/yum/cuda-9-2-local/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all
+# CUDA 9.2 Patch 1
+RUN wget -q https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.88.1_linux && \
+    chmod +x cuda_9.2.88.1_linux && \
+    ./cuda_9.2.88.1_linux -s --accept-eula && \
+    rm -f cuda_9.2.88.1_linux
+
+# Cuda 10.0
+RUN curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64 > cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-0-local-10.0.130-410.48/cuda-minimal-build-10-0-10.0.130-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-0-local-10.0.130-410.48/cuda-cufft-dev-10-0-10.0.130-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-0-local-10.0.130-410.48/cuda-driver-dev-10-0-10.0.130-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-0-local-10.0.130-410.48/cuda-nvrtc-10-0-10.0.130-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-0-local-10.0.130-410.48/cuda-nvrtc-dev-10-0-10.0.130-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm /var/cuda-repo-10-0-local-10.0.130-410.48/*.rpm /var/cache/yum/cuda-repo-10-0-local-10.0.130-410.48/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all

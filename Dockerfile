@@ -60,6 +60,8 @@ RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
     /usr/local/texlive/2018/bin/x86_64-linux/tlmgr install \
           cmap fancybox titlesec framed fancyvrb threeparttable \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring fncychap tabulary capt-of eqparbox environ trimspaces varwidth latexmk && \
+          xstring fncychap tabulary capt-of eqparbox environ trimspaces varwidth latexmk \
+          etoolbox framed xcolor fancyvrb float wrapfig parskip upquote \
+          capt-of needspace && \
     ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
 ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH

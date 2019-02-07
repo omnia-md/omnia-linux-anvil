@@ -13,7 +13,8 @@ FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 # NOTE: NONE of these install the actual CUDA *DRIVER* as they would conflict with each other
 # We instead install 1 driver at the end which is backwards compatible with the various CUDA versions and adds a single
 # libcuda.so to /usr/lib64, which is needed by OpenMM to detect CUDA_CUDA_LIBRARY [sic] and different from /usr/local
-# installs of the cuda veersions below
+# installs of the cuda veersions below.
+# Unsure if we need the driver or the files in the `cuda-XX.Y/lib64/stubs` folder for each CUDA version
 
 # CUDA 7.5
 RUN curl -L http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm > cuda-repo-rhel6-7-5-local-7.5-18.x86_64.rpm && \

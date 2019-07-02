@@ -118,7 +118,6 @@ RUN curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
 
-#
 # Cuda 10.1
 RUN curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm > cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm && \
     rpm --quiet -i cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm && \
@@ -130,11 +129,6 @@ RUN curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers
     rm -rf /cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm /var/cuda-repo-10-1-local-10.1.168-418.67/*.rpm /var/cache/yum/cuda-repo-10-1-local-10.1.168-418.67/ && \
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
-# CUDA 10.1 Patch 1
-#RUN wget -q https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_418.67_linux.run && \
-#    chmod +x cuda_10.1.168_418.67_linux.run && \
-#    ./cuda_10.1.168_418.67_linux.run -s --accept-eula && \
-#    rm -f cuda_10.1.168_418.67_linux.run
 
 # Finally, install *a* NVIDIA driver, use the "long lived branch"  one
 # https://www.nvidia.com/object/unix.html

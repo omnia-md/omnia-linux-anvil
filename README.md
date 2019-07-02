@@ -22,7 +22,7 @@ Builds can be found [here](https://hub.docker.com/r/omnia/omnia-linux-anvil/)
 
 The compiled images will be available to pull from Docker Hub. The image can be accessed with the following command:
 
-`docker pull jchodera/omnia-linux-anvil:texlive-amd30-cuda91`
+`docker pull omnia/omnia-linux-anvil:condaforge-texlive18-cuda75to100`
 
 An example of a this docker image in action can be found on the
 [Omnia MD Conda recipes channel](https://github.com/omnia-md/conda-recipes).

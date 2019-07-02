@@ -7,7 +7,7 @@ RUN wget -q http://us.download.nvidia.com/XFree86/Linux-x86_64/430.26/NVIDIA-Lin
     rm -f NVIDIA-Linux-x86_64-430.26.run
 
 # Install CUDA 10.0
-RUN wget -q https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.1.168_418.67_linux.run && \
+RUN wget -q https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_418.67_linux.run && \
     chmod +x cuda_10.1.168_418.67_linux.run && \
     source /opt/docker/bin/entrypoint_source && \
     ./cuda_10.1.168_418.67_linux.run --silent --no-opengl-libs --toolkit && \

@@ -118,9 +118,27 @@ RUN curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
 
+#
+# Cuda 10.1
+RUN curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm > cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-minimal-build-10-1-10.1.168-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-cufft-dev-10-1-10.1.168-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-driver-dev-10-0-10.1.168-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-nvrtc-10-1-10.1.168-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-nvrtc-dev-10-1-10.1.168-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-10-0-local-10.0.130-410.48-1.0-1.x86_64.rpm /var/cuda-repo-10-1-local-10.1.168-418.67/*.rpm /var/cache/yum/cuda-repo-10-1-local-10.1.168-418.67/ && \
+    yum clean -y --quiet expire-cache && \
+    yum clean -y --quiet all
+# CUDA 10.1 Patch 1
+#RUN wget -q https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_418.67_linux.run && \
+#    chmod +x cuda_10.1.168_418.67_linux.run && \
+#    ./cuda_10.1.168_418.67_linux.run -s --accept-eula && \
+#    rm -f cuda_10.1.168_418.67_linux.run
+
 # Finally, install *a* NVIDIA driver, use the "long lived branch"  one
 # https://www.nvidia.com/object/unix.html
-RUN wget -q http://us.download.nvidia.com/XFree86/Linux-x86_64/410.93/NVIDIA-Linux-x86_64-410.93.run && \
-    chmod +x NVIDIA-Linux-x86_64-410.93.run && \
-    ./NVIDIA-Linux-x86_64-410.93.run --silent --accept-license --no-kernel-module --no-kernel-module-source --no-nvidia-modprobe --no-rpms --no-drm --no-libglx-indirect --no-distro-scripts && \
-    rm -f NVIDIA-Linux-x86_64-410.93.run
+RUN wget -q http://us.download.nvidia.com/XFree86/Linux-x86_64/430.26/NVIDIA-Linux-x86_64-430.26.run && \
+    chmod +x NVIDIA-Linux-x86_64-430.26.run && \
+    ./NVIDIA-Linux-x86_64-430.26.run --silent --accept-license --no-kernel-module --no-kernel-module-source --no-nvidia-modprobe --no-rpms --no-drm --no-libglx-indirect --no-distro-scripts && \
+    rm -f NVIDIA-Linux-x86_64-430.26.run

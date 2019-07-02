@@ -16,7 +16,7 @@ compute-based calculations and TeX packages for doc building.
 This repository is monitored by [Docker Hub](https://hub.docker.com/) and every branch is automatically built
 and compiled to be accessed as a [Docker](https://www.docker.com/) container.
 
-Builds can be found [here](https://hub.docker.com/r/jchodera/omnia-linux-anvil/)
+Builds can be found [here](https://hub.docker.com/r/omnia/omnia-linux-anvil/)
 
 ## Accessing and this Image
 

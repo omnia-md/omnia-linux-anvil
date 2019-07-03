@@ -8,7 +8,7 @@ compute-based calculations and TeX packages for doc building.
 ## Image Features and Extensions
 
 * TeXLive 2018
-* CUDA 10.0
+* CUDA 10.1
 
 ## Building the Image
 

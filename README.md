@@ -7,22 +7,23 @@ compute-based calculations and TeX packages for doc building.
 
 ## Image Features and Extensions
 
-* TeXLive 2017
-* AMD APP SDK 3.0
-* CUDA 9.1
+* TeXLive 2019
+* CUDA 9.2
+
+Note: This version does NOT contain an actual driver, another image extends this to include one
 
 ## Building the Image
 
 This repository is monitored by [Docker Hub](https://hub.docker.com/) and every branch is automatically built 
 and compiled to be accessed as a [Docker](https://www.docker.com/) container.
 
-Builds can be found [here](https://hub.docker.com/r/jchodera/omnia-linux-anvil/)
+Builds can be found [here](https://hub.docker.com/r/omniamd/omnia-linux-anvil/)
 
 ## Accessing and this Image
 
 The compiled images will be available to pull from Docker Hub. The image can be accessed with the following command:
 
-`docker pull jchodera/omnia-linux-anvil:texlive-amd30-cuda91`
+`docker pull omniamd/omnia-linux-anvil:condaforge-texlive19-cuda92-NoDrive`
 
 An example of a this docker image in action can be found on the 
 [Omnia MD Conda recipes channel](https://github.com/omnia-md/conda-recipes).

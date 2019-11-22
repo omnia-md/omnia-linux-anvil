@@ -1,4 +1,4 @@
-FROM condaforge/linux-anvil
+FROM condaforge/linux-anvil-comp7
 
 # Install TeXLive 2018 for Omnia Projects
 

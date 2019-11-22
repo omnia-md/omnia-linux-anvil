@@ -21,7 +21,7 @@ RUN curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers
     rpm --quiet -i cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm && \
     yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-minimal-build-10-1-10.1.168-1.x86_64.rpm && \
     yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-cufft-dev-10-1-10.1.168-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-driver-dev-10-0-10.1.168-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-driver-dev-10-1-10.1.168-1.x86_64.rpm && \
     rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-nvrtc-10-1-10.1.168-1.x86_64.rpm && \
     rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-1-local-10.1.168-418.67/cuda-nvrtc-dev-10-1-10.1.168-1.x86_64.rpm && \
     rm -rf /cuda-repo-rhel6-10-1-local-10.1.168-418.67-1.0-1.x86_64.rpm /var/cuda-repo-10-1-local-10.1.168-418.67/*.rpm /var/cache/yum/cuda-repo-10-1-local-10.1.168-418.67/ && \

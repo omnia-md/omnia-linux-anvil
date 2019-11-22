@@ -1,6 +1,6 @@
 FROM condaforge/linux-anvil-comp7
 
-# Install TeXLive 2018 for Omnia Projects
+# Install TeXLive 2019 for Omnia Projects
 
 #
 # Install EPEL and extra packages
@@ -20,7 +20,7 @@ RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8
     yum clean -y --quiet all
 
 #
-# Install GLIBC 2.14 for TeXLive 2018 which needs full C++11 to run
+# Install GLIBC 2.14 for TeXLive 2019 which needs full C++11 to run
 #
 # The localedata and localedef lines are there for the following conditions:
 #  1. Conda Forge sets en_US.UTF-8 as LANG in its env
@@ -46,23 +46,33 @@ RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.t
     cd / && rm -rf glibc*
 
 #
-# Install TeXLive 2018
+# Install TeXLive 2019
 #
 
 # Add config file from repo
 ADD texlive.profile .
+# Future legacy downloads in case we want to lock to versions in the future: ftp://tug.org/historic/systems/texlive/
 # Download, untar, install, remove install files, install additional packages, make symlinks for all users
+# There are a few existing base package now in 2019:
+# - alltt
+# - atbegshi
+# - color
+# - kvoptions
+# - longtable
+# - makeidx
+# - remreset
+# I don't know where `sphinxmulticell` came from, but it does not exist in ctan at all
 RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
     curl -L http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz --output install-tl-unx.tar.gz && \
     tar -xzf install-tl-unx.tar.gz && \
     cd install-tl-* && ./install-tl -profile /texlive.profile && cd - && \
     rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \
-    /usr/local/texlive/2018/bin/x86_64-linux/tlmgr install \
+    /usr/local/texlive/2019/bin/x86_64-linux/tlmgr install \
           cmap fancybox titlesec framed fancyvrb threeparttable \
           mdwtools wrapfig parskip upquote float multirow hyphenat caption \
           xstring fncychap tabulary capt-of eqparbox environ trimspaces \
-          varwidth latexmk etoolbox longtable sphinxmulticell makeidx framed \
-          xcolor color fancyvrb float wrapfig parskip alltt upquote \
-          capt-of needspace remreset atbegshi kvoptions && \
-    ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
-ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+          varwidth latexmk etoolbox framed \
+          xcolor fancyvrb float wrapfig parskip upquote \
+          capt-of needspace && \
+    ln -s /usr/local/texlive/2019/bin/x86_64-linux/* /usr/local/sbin/
+ENV PATH=/usr/local/texlive/2019/bin/x86_64-linux:$PATH

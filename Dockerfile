@@ -1,4 +1,4 @@
-FROM omniamd/omnia-linux-anvil:condaforge-texlive18
+FROM omniamd/omnia-linux-anvil:condaforge-texlive19
 
 #
 # Install all the CUDA variants in their minimal Forms
@@ -19,11 +19,11 @@ FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 # Cuda 10.2
 RUN curl -L https://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm > cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm && \
     rpm --quiet -i cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm && \
-    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-minima-build-10-2-10.2.89-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-minimal-build-10-2-10.2.89-1.x86_64.rpm && \
     yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-cufft-dev-10-2-10.2.89-1.x86_64.rpm && \
     yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-driver-dev-10-2-10.2.89-1.x86_64.rpm && \
     rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-nvrtc-10-2-10.2.89-1.x86_64.rpm && \
     rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-nvrtc-dev-10-2-10.2.89-1.x86_64.rpm && \
-    rm -rf /cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm /var/cuda-repo-10-2-local-10.2.89-440.33/*.rpm /var/cache/yum/cuda-repo-10-2-local-10.2.89-440.33.01/ && \
+    rm -rf /cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm /var/cuda-repo-10-2-local-10.2.89-440.33.01/*.rpm /var/cache/yum/x86_64/6/cuda-10-2-local-10.2.89-440.33.01/ && \
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all

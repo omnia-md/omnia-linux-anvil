@@ -1,67 +1,29 @@
-FROM condaforge/linux-anvil-comp7
-
-# Install TeXLive 2018 for Omnia Projects
+FROM omniamd/omnia-linux-anvil:condaforge-texlive18
 
 #
-# Install EPEL and extra packages
+# Install all the CUDA variants in their minimal Forms
 #
 
-# CUDA requires dkms libvdpau
-# TeX installation requires wget and perl
-# The other TeX packages installed with `tlmgr install` are required for OpenMM's sphinx doc
-# libXext libSM libXrender are required for matplotlib to work
+# NOTE: This might be more than is needed for OpenMM
+# NOTE: Installing by RPM is much smaller than installing it "automatically"
+# Caveat: Installing this way causes the lib64 and include directory to be symlinked to
+#         targets/x86_64-linux/lib and targets/x86_64-linux/include respectively
+#         A full install moves these but we don't need to, UNLESS we install the patch (e.g. the 3 patches for 9.1)
 
-# Download and install EPEL, install extra packages for TeX, AMD, and CUDA, cleanup yum
-RUN curl -L http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm --output epel-release-6-8.noarch.rpm && \
-    rpm -i --quiet epel-release-6-8.noarch.rpm && \
-    rm -rf epel-release-6-8.noarch.rpm && \
-    yum install -y --quiet perl dkms libvdpau git wget libXext libSM libXrender groff && \
+# NOTE: NONE of these install the actual CUDA *DRIVER* as they would conflict with each other
+# We instead install 1 driver at the end which is backwards compatible with the various CUDA versions and adds a single
+# libcuda.so to /usr/lib64, which is needed by OpenMM to detect CUDA_CUDA_LIBRARY [sic] and different from /usr/local
+# installs of the cuda veersions below.
+# Unsure if we need the driver or the files in the `cuda-XX.Y/lib64/stubs` folder for each CUDA version
+
+# Cuda 10.2
+RUN curl -L https://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm > cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm && \
+    rpm --quiet -i cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-minima-build-10-2-10.2.89-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-cufft-dev-10-2-10.2.89-1.x86_64.rpm && \
+    yum --nogpgcheck localinstall -y --quiet /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-driver-dev-10-2-10.2.89-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-nvrtc-10-2-10.2.89-1.x86_64.rpm && \
+    rpm --quiet -i --nodeps --nomd5 /var/cuda-repo-10-2-local-10.2.89-440.33.01/cuda-nvrtc-dev-10-2-10.2.89-1.x86_64.rpm && \
+    rm -rf /cuda-repo-rhel6-10-2-local-10.2.89-440.33.01-1.0-1.x86_64.rpm /var/cuda-repo-10-2-local-10.2.89-440.33/*.rpm /var/cache/yum/cuda-repo-10-2-local-10.2.89-440.33.01/ && \
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
-
-#
-# Install GLIBC 2.14 for TeXLive 2018 which needs full C++11 to run
-#
-# The localedata and localedef lines are there for the following conditions:
-#  1. Conda Forge sets en_US.UTF-8 as LANG in its env
-#  2. Adding the new GLIBC to LD_LIBRARY_PATH causes Perl to try and use it
-#  3. The Locales are not built by default with a GLIBC
-#  4. Perl then complains because the UTF-8 Locale is not compiled
-#  5. Running localedef uses the system one, and there does not appear to be a way to change the new one's pointer
-#  6. Finding the exact combination of commands to get the new localedef to work required digging through the Makefile
-#  7. These 2 commands create the pre-requisite folder to drop the locale file, and then compile ONLY en_US.UTF-8
-#  8. Using the built in Makefile commands installs all of the locales, which is >100MB
-#  9. locale-gen does not exist on CentOS 6
-# 10. Debugging this was a pain, especially since if you unset LANG, the errors go away (but may cause texlive to segfault later)
-
-RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.tar.gz && \
-    tar -zxf glibc-2.14.tar.gz && \
-    cd glibc-2.14 && \
-    mkdir build && \
-    cd build && \
-    CC=/opt/rh/devtoolset-2/root/usr/bin/gcc ../configure --prefix=/opt/glibc-2.14 && \
-    make -s && make -s install && \
-    make localedata/install-locales-dir && \
-    locale/localedef --alias-file=../intl/locale.alias -i ../localedata/locales/en_US -c -f ../localedata/charmaps/UTF-8 en_US.UTF-8 && \
-    cd / && rm -rf glibc*
-
-#
-# Install TeXLive 2018
-#
-
-# Add config file from repo
-ADD texlive.profile .
-# Download, untar, install, remove install files, install additional packages, make symlinks for all users
-RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib && \
-    curl -L http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz --output install-tl-unx.tar.gz && \
-    tar -xzf install-tl-unx.tar.gz && \
-    cd install-tl-* && ./install-tl -profile /texlive.profile && cd - && \
-    rm -rf install-tl-unx.tar.gz install-tl-* texlive.profile && \
-    /usr/local/texlive/2018/bin/x86_64-linux/tlmgr install \
-          cmap fancybox titlesec framed fancyvrb threeparttable \
-          mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-          xstring fncychap tabulary capt-of eqparbox environ trimspaces varwidth latexmk \
-          etoolbox framed xcolor fancyvrb float wrapfig parskip upquote \
-          capt-of needspace && \
-    ln -s /usr/local/texlive/2018/bin/x86_64-linux/* /usr/local/sbin/
-ENV PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH

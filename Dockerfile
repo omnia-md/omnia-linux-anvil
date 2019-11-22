@@ -39,7 +39,7 @@ RUN curl -L https://ftp.gnu.org/gnu/libc/glibc-2.14.tar.gz --output glibc-2.14.t
     cd glibc-2.14 && \
     mkdir build && \
     cd build && \
-    CC=/opt/rh/devtoolset-2/root/usr/bin/gcc ../configure --prefix=/opt/glibc-2.14 && \
+    CC=/usr/bin/gcc ../configure --prefix=/opt/glibc-2.14 && \
     make -s && make -s install && \
     make localedata/install-locales-dir && \
     locale/localedef --alias-file=../intl/locale.alias -i ../localedata/locales/en_US -c -f ../localedata/charmaps/UTF-8 en_US.UTF-8 && \

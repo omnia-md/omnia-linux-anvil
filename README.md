@@ -10,8 +10,6 @@ compute-based calculations and TeX packages for doc building.
 * TeXLive 2019
 * CUDA 10.1
 
-Note: This version does NOT contain an actual driver, another image extends this to include one
-
 ## Building the Image
 
 This repository is monitored by [Docker Hub](https://hub.docker.com/) and every branch is automatically built 
@@ -23,7 +21,7 @@ Builds can be found [here](https://hub.docker.com/r/omniamd/omnia-linux-anvil/)
 
 The compiled images will be available to pull from Docker Hub. The image can be accessed with the following command:
 
-`docker pull omniamd/omnia-linux-anvil:condaforge-texlive19-cuda101-NoDrive`
+`docker pull omniamd/omnia-linux-anvil:condaforge-texlive19-cuda101`
 
 An example of a this docker image in action can be found on the 
 [Omnia MD Conda recipes channel](https://github.com/omnia-md/conda-recipes).

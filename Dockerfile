@@ -53,6 +53,51 @@ RUN yum update -y && \
     yum clean -y --quiet expire-cache && \
     yum clean -y --quiet all
 
+
+# Install conda
+
+# give sudo permission for conda user to run yum (user creation is postponed
+# to the entrypoint, so we can create a user with the same id as the host)
+RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
+
+# Install Miniconda with Python 3 and update everything.
+# NOTE: This step differs from condaforge/linux-anvil
+RUN curl -s -L https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh > miniconda.sh && \
+    sha256sum miniconda.sh | grep bb2e3cedd2e78a8bb6872ab3ab5b1266a90f8c7004a22d8dc2ea5effeb6a439a && \
+    bash miniconda.sh -b -p /opt/conda && \
+    rm miniconda.sh && \
+    export PATH=/opt/conda/bin:$PATH && \
+    conda config --set show_channel_urls True && \
+    conda config --add channels conda-forge && \
+    touch /opt/conda/conda-meta/pinned && \
+    conda upgrade --yes conda && \
+    conda update --all --yes && \
+    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git && \
+    conda build purge-all && \
+    #export CONDA_CONDA_INFO=( `conda list conda | grep conda` ) && \
+    #echo "conda ${CONDA_CONDA_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
+    rm -rf /opt/conda/pkgs/*
+
+# Install conda build and deployment tools
+# NOTE: This step differs from condaforge/linux-anvil
+RUN export PATH="/opt/conda/bin:${PATH}" && \
+    export CONDA_BUILD_INFO=( `conda list conda-build | grep conda-build` ) && \
+    echo "conda-build ${CONDA_BUILD_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
+    conda build purge-all && \
+    rm -rf /opt/conda/pkgs/*
+
+# Install docker tools.
+RUN export PATH="/opt/conda/bin:${PATH}" && \
+    conda install --yes gosu && \
+    export CONDA_GOSU_INFO=( `conda list gosu | grep gosu` ) && \
+    echo "gosu ${CONDA_GOSU_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
+    conda install --yes tini && \
+    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
+    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
+    . /opt/conda/bin/activate root && \
+    conda build purge-all && \
+    rm -rf /opt/conda/pkgs/*
+
 #
 # Install TeXLive on top of conda-forge linux-anvil image
 #
@@ -135,49 +180,6 @@ RUN wget -q https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.
     ./cuda_9.2.88.1_linux -s --accept-eula && \
     rm -f cuda_9.2.88.1_linux
 
-
-# Install conda
-
-# give sudo permission for conda user to run yum (user creation is postponed
-# to the entrypoint, so we can create a user with the same id as the host)
-RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
-
-# Install Miniconda with Python 3 and update everything.
-# NOTE: This step differs from condaforge/linux-anvil
-RUN curl -s -L https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh > miniconda.sh && \
-    sha256sum miniconda.sh | grep bb2e3cedd2e78a8bb6872ab3ab5b1266a90f8c7004a22d8dc2ea5effeb6a439a && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh && \
-    export PATH=/opt/conda/bin:$PATH && \
-    conda config --set show_channel_urls True && \
-    conda config --add channels conda-forge && \
-    touch /opt/conda/conda-meta/pinned && \
-    conda update --all --yes && \
-    conda build purge-all && \
-    #export CONDA_CONDA_INFO=( `conda list conda | grep conda` ) && \
-    #echo "conda ${CONDA_CONDA_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    rm -rf /opt/conda/pkgs/*
-
-# Install conda build and deployment tools
-# NOTE: This step differs from condaforge/linux-anvil
-RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git && \
-    export CONDA_BUILD_INFO=( `conda list conda-build | grep conda-build` ) && \
-    echo "conda-build ${CONDA_BUILD_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda build purge-all && \
-    rm -rf /opt/conda/pkgs/*
-
-# Install docker tools.
-RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes gosu && \
-    export CONDA_GOSU_INFO=( `conda list gosu | grep gosu` ) && \
-    echo "gosu ${CONDA_GOSU_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda install --yes tini && \
-    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
-    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    . /opt/conda/bin/activate root && \
-    conda build purge-all && \
-    rm -rf /opt/conda/pkgs/*
 
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root` and the devtoolset compiler.
